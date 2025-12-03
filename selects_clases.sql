@@ -159,3 +159,52 @@ from tienda.cliente c
 where c.tipo_identificacion = 'CEDULA';
 
 
+select distinct p.precio, p.costo
+from tienda.producto p
+order by p.precio desc, p.costo;
+
+select distinct p.precio
+from tienda.producto p
+order by p.precio desc;
+
+select distinct p.precio
+from tienda.producto p
+where p.precio < 30
+order by p.precio;
+
+
+select distinct p.precio
+from tienda.producto p
+where p.precio >= 30
+order by p.precio;
+
+--agregaciones
+select sum(f.total) total_facturas
+from tienda.factura f;
+
+select count(c.id_cliente) total_clientes
+from tienda.cliente c;
+
+select count(f.id_factura ) cantidad_facturas,
+       sum(f.total) total_facturas
+from tienda.factura f;
+
+select AVG(p.precio) promedio_precio
+from tienda.producto p;
+
+select (sum(p.precio) / count(p.id_producto)) promedio_precio
+from tienda.producto p;
+
+select max(p.precio) precio_max, 
+       min(p.precio) precio_minimo
+from tienda.producto p;
+
+select f.estado, count(f.id_factura) cantidad
+from tienda.factura f
+group by f.estado;
+
+--subconsulta
+select c.*
+from tienda.cliente c
+where c.id_cliente in (select f.id_cliente 
+                       from tienda.factura f);
