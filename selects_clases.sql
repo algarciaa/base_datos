@@ -208,3 +208,58 @@ select c.*
 from tienda.cliente c
 where c.id_cliente in (select f.id_cliente 
                        from tienda.factura f);
+
+select c.*
+from tienda.cliente c
+where c.id_cliente not in (select f.id_cliente
+                           from tienda.factura f)
+
+
+select f.*
+from tienda.factura f
+where f.total >= (select AVG(p.total)
+from tienda.factura p);
+
+select df.*
+from tienda.detalle_factura df
+order by df.id_detalle 
+limit 7 offset 397;
+
+select p.*
+from tienda.producto p
+where p.nombre like '%Ac%';
+
+select p.*
+from tienda.producto p
+where p.nombre ilike '%ac%';
+
+select p.*
+from tienda.producto p
+where p.nombre = 'aceite motor';
+
+select p.*
+from tienda.proveedor p
+where p.contacto ilike '%p%';
+
+select p.*
+from tienda.proveedor p
+where p.contacto ilike 'p%';
+
+
+select p.*
+from tienda.proveedor p
+where p.contacto like '%P%';
+
+
+select df.*
+from tienda.detalle_factura df
+where df.id_detalle between 10 and 20;
+
+
+select p.nombre,
+       case
+	    when p.precio <= 20 then 'baratos'
+	    when p.precio > 20 and p.precio <= 40 then 'medios'
+	    else 'caros'
+	   end as rango
+from tienda.producto p
