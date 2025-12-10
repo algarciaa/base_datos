@@ -262,4 +262,48 @@ select p.nombre,
 	    when p.precio > 20 and p.precio <= 40 then 'medios'
 	    else 'caros'
 	   end as rango
+from tienda.producto p;
+
+select c.nombre || ' ' || c.apellido as nombre
+from tienda.cliente c;
+
+select fc.*
+from (
+select c.nombre || ' ' || c.apellido as nombre
+from tienda.cliente c) fc
+where fc.nombre  like '%L%P%';
+
+select fc.*
+from (
+select c.nombre || ' ' || c.apellido as nombre
+from tienda.cliente c) fc
+where fc.nombre  ilike '%l%p%';
+
+select c.id_cliente,
+       c.nombre,
+       c.apellido,
+       coalesce(c.telefono, 'No tiene telefono') as telefono
+from tienda.cliente c
+where c.telefono is null;
+
+select p.id_proveedor, count(1) as cantidad
 from tienda.producto p
+group by p.id_proveedor
+having count(1) >= 50;
+
+
+
+select p.id_proveedor, 
+       sum(p.costo) as costo_total
+from tienda.producto p
+group by p.id_proveedor
+having sum(p.costo) >= 5000;
+
+
+select p.id_proveedor, 
+       count(1) as cantidad,
+       sum(p.costo) as costo_total
+from tienda.producto p
+group by p.id_proveedor
+having (count(1) >= 49 and count(1) <= 51) and
+       sum(p.costo) = 5568.34;
