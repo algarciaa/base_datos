@@ -307,3 +307,54 @@ from tienda.producto p
 group by p.id_proveedor
 having (count(1) >= 49 and count(1) <= 51) and
        sum(p.costo) = 5568.34;
+
+select c.nombre || ' ' || c.apellido  as nombre,
+       count(f.id_factura) as total_facturas,
+       sum(f.total) as total_consumido
+from tienda.cliente c
+     inner join tienda.factura f
+     on c.id_cliente = f.id_cliente
+group by c.nombre, c.apellido
+having (count(f.id_factura) >= 7 and count(f.id_factura) <= 10)
+order by total_facturas
+
+
+select p.nombre,
+       (select sum(df.subtotal_linea)
+        from tienda.detalle_factura df
+        where df.id_producto = p.id_producto) as total_vendido
+from tienda.producto p;
+
+select c.nombre, ventas.total
+from (select f.id_cliente, sum(f.total) as total
+      from tienda.factura f
+      group by f.id_cliente) as ventas
+      inner join tienda.cliente c
+      on ventas.id_cliente = c.id_cliente;
+
+with ventas as (
+	select f.id_cliente, sum(f.total) as total
+	from tienda.factura f
+	group by f.id_cliente
+)
+select c.nombre, c.apellido, v.total 
+from ventas v
+     inner join tienda.cliente c
+     on v.id_cliente = c.id_cliente;
+
+select f.fecha,
+       count(f.id_factura) as total_facturas,
+       sum(f.total) as total_facturado
+from tienda.factura f
+where f.fecha between '2024-10-01' and '2025-03-31'
+group by f.fecha
+order by f.fecha
+
+
+select to_char(f.fecha, 'YYYY-MM') as mes,
+       count(f.id_factura) as total_facturas,
+       sum(f.total) as total_facturado
+from tienda.factura f
+where f.fecha between '2024-10-01' and '2025-03-31'
+group by mes
+order by mes
