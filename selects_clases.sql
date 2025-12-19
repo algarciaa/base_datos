@@ -358,3 +358,23 @@ from tienda.factura f
 where f.fecha between '2024-10-01' and '2025-03-31'
 group by mes
 order by mes
+
+"La tienda quiere premiar a sus 5 mejores clientes. Usa un CTE para calcular cuánto 
+ha gastado cada cliente en total (solo facturas 'PAGADA'). Luego, muestra el 
+nombre del cliente, su email y el total gastado, ordenado de mayor a menor."
+
+with ComprasPorCliente as (
+	select f.id_cliente,
+	       sum(f.total) as total_gastado
+	from tienda.factura f
+	where f.estado = 'PAGADA'
+	group by f.id_cliente
+)
+select c.nombre,
+       c.email,
+       cpc.total_gastado
+from ComprasPorCliente cpc
+inner join tienda.cliente c
+on cpc.id_cliente = c.id_cliente
+order by cpc.total_gastado desc
+limit 5;
